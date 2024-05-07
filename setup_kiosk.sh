@@ -1,30 +1,5 @@
 #!/bin/bash
 
-###############################################################################
-#
-# configure-kiosk.sh
-#
-# Author: dgrubb
-# Date 05/26/2017
-#
-# Configures a fresh installation of Xubuntu to convert it into a kiosk which
-# only runs a web application within Google Chrome. A user is created, named
-# kiosk, whose account can only be accessed by automatically launching an X
-# session (password is disabled). That X session doesn't include any desktop
-# environment but instead runs Google Chrome in fullscreen kiosk mode.
-#
-# Usage: Launch as root (or with root permissions):
-#   $ sudo ./configure-kiosk.sh
-#
-#   Tested on:
-#
-#       Xubuntu 17.04
-#
-# Other Ubuntu relatives will probably work fine, but I've only tested it on
-# the above list.
-#
-###############################################################################
-
 launch_dir=`pwd`
 readonly START_TIME=`date +%Y-%m-%dT%H:%M:%S`
 readonly LOG_DIR="logs"
@@ -68,7 +43,6 @@ Y_RES=\`xrandr | grep \"*\" | awk -Fx '{ print \$2 }' | awk '{ print \$1 }'\`\n\
 ###############################################################################
 
 # Configuration steps
-do_install_openssh="y"
 do_install_chrome=y
 do_create_kiosk_user=y
 do_create_kiosk_xsession=y
@@ -82,13 +56,6 @@ msg() {
 }
 
 ###############################################################################
-
-install_openssh() {
-    msg "Installing openssh-server"
-    apt-get install -y openssh-server
-    systemctl enable ssh
-    systemctl start ssh
-}
 
 create_kiosk_user() {
     msg "Creating kiosk group and user"
@@ -151,10 +118,6 @@ if [ ! -z $entry ]; then
         msg "Install cancelled"
         exit 0
     fi
-fi
-
-if [ $do_install_openssh = "y" ]; then
-    install_openssh
 fi
 
 if [ $do_install_chrome = "y" ]; then
