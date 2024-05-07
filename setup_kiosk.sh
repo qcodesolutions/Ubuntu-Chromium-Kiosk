@@ -30,7 +30,7 @@ Encoding=UTF-8\n\
 Name=Kiosk\n\
 Comment=Start a Chrome-based Kiosk session\n\
 Exec=/bin/bash /home/kiosk/start-chrome.sh\n\
-Icon=google-chrome"
+Icon=google=chrome"
 
 readonly START_CHROME="\
 #!/bin/bash\n\n\
@@ -101,10 +101,12 @@ write_chrome_startup() {
 
 # Start execution
 msg "Configure Kiosk"
-read -rp "Press ENTER to continue (c to cancel) ..." entry
-if [[ $entry == "c" ]]; then
-    msg "Install cancelled"
-    exit 0
+read -p "Press ENTER to continue (c to cancel) ..." entry
+if [ ! -z $entry ]; then
+    if [ $entry = "c" ]; then
+        msg "Install cancelled"
+        exit 0
+    fi
 fi
 
 if [[ $do_install_openssh == "y" ]]; then
@@ -131,11 +133,12 @@ if [[ $do_write_chrome_startup == "y" ]]; then
     write_chrome_startup
 fi
 
-msg "Installation complete, press ENTER to reboot!"
-read -rp "Press ENTER to reboot (c to cancel) ..." entry
-if [[ $entry == "c" ]]; then
-    msg "Reboot cancelled"
-    exit 0
+read -p "Press ENTER to reboot (c to cancel) ..." entry
+if [ ! -z $entry ]; then
+    if [ $entry = "c" ]; then
+        msg "Install cancelled"
+        exit 0
+    fi
 fi
 sudo reboot
 
