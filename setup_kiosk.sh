@@ -36,7 +36,7 @@ readonly START_CHROME="\
 #!/bin/bash\n\n\
 X_RES=\`xrandr | grep \"*\" | awk -Fx '{ print \$1 }' | sed 's/[^0-9]*//g'\`\n\
 Y_RES=\`xrandr | grep \"*\" | awk -Fx '{ print \$2 }' | awk '{ print \$1 }'\`\n\n\
-/usr/bin/chromium --kiosk --start-fullscreen --window-position=0,0 \
+/usr/bin/google-chrome --kiosk --start-fullscreen --window-position=0,0 \
 --window-size=\$X_RES,\$Y_RES --no-first-run --no-default-browser-check \
 --disable-translate $WEB_APP_URL\n"
 
@@ -81,9 +81,14 @@ create_kiosk_xsession() {
 
 install_chrome() {
     msg "Installing Chrome browser"
-    apt-get update
-    apt-get install -y --no-install-recommends chromium-browser
-    apt-get install openssh-server -y && systemctl enable ssh
+    grep chrome /etc/apt/sources.list.d/google-chrome.list >&/dev/null || (
+        wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
+        echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
+        apt-get update
+        apt-get install -y --no-install-recommends google-chrome-stable
+    )
+    apt-get install -y openssh-server
+    systemctl enable ssh
 }
 
 ###############################################################################
