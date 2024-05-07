@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+
 launch_dir=`pwd`
 readonly START_TIME=`date +%Y-%m-%dT%H:%M:%S`
 readonly LOG_DIR="logs"
@@ -43,6 +45,7 @@ Y_RES=\`xrandr | grep \"*\" | awk -Fx '{ print \$2 }' | awk '{ print \$1 }'\`\n\
 ###############################################################################
 
 # Configuration steps
+do_install_openssh=y
 do_install_chrome=y
 do_create_kiosk_user=y
 do_create_kiosk_xsession=y
@@ -54,6 +57,14 @@ do_write_chrome_startup=y
 msg() {
     echo "[$(date +%Y-%m-%dT%H:%M:%S%z)]: $@" >&2
 }
+
+###############################################################################
+
+install_openssh() {
+    msg "Installing openssh-server"
+    apt-get install openssh-server
+    systemctl enable ssh
+    systemctl start ssh
 
 ###############################################################################
 
@@ -118,6 +129,10 @@ if [ ! -z $entry ]; then
         msg "Install cancelled"
         exit 0
     fi
+fi
+
+if [ $do_install_openssh = "y" ]; then
+    install_openssh
 fi
 
 if [ $do_install_chrome = "y" ]; then
