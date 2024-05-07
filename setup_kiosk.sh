@@ -1,5 +1,7 @@
 #!/bin/bash
 
+readonly WEB_APP_URL="https://dminti.deploy.qwellco.de"
+
 # Step 1: Update Ubuntu
 sudo apt update
 sudo apt upgrade -y
@@ -35,7 +37,7 @@ After=graphical.target
 Environment=DISPLAY=:0
 Type=simple
 ExecStartPre=/opt/kiosk/cleanup_kiosk.sh
-ExecStart=/usr/bin/chromium-browser -noerrdialogs --disable-infobars --no-first-run --start-maximized --kiosk https://dminti.deploy.qwellco.de
+ExecStart=/usr/bin/chromium-browser -noerrdialogs --disable-infobars --no-first-run --start-maximized --kiosk $WEB_APP_URL
 Restart=always
 User=kiosk
 Group=kiosk
