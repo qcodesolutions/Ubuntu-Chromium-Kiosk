@@ -155,14 +155,15 @@ if [ $do_write_chrome_startup = "y" ]; then
     write_chrome_startup
 fi
 
-msg "Installation complete, press ENTER to reboot!"
-if [ ! -z $entry ]; then
-    if [ $entry = "c" ]; then
-        msg "Reboot cancelled"
-        exit 0
-    fi
-fi
-sudo reboot
+#msg "Installation complete, press ENTER to reboot!"
+#if [ ! -z $entry ]; then
+#    if [ $entry = "c" ]; then
+#        msg "Reboot cancelled"
+#        exit 0
+#    fi
+#fi
+#sudo reboot
+msg "Installation complete, please reboot with: $ sudo reboot"
 
 exit 0
 
