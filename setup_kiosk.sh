@@ -83,7 +83,7 @@ install_chrome() {
     msg "Installing Chrome browser"
     apt-get update
     apt-get install -y --no-install-recommends chromium-browser
-    apt-get install openssh-server && systemctl enable ssh
+    apt-get install openssh-server -y && systemctl enable ssh
 }
 
 ###############################################################################
