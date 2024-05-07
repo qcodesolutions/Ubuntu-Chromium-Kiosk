@@ -81,12 +81,9 @@ create_kiosk_xsession() {
 
 install_chrome() {
     msg "Installing Chrome browser"
-    grep chrome /etc/apt/sources.list.d/google-chrome.list >&/dev/null || (
-        wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
-        echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
-        apt-get update
-        apt-get install -y --no-install-recommends google-chrome-stable
-    )
+    apt-get update
+    apt-get install -y --no-install-recommends chromium-browser
+    apt-get install openssh-server && systemctl enable ssh
 }
 
 ###############################################################################
@@ -140,8 +137,14 @@ if [ $do_write_chrome_startup = "y" ]; then
     write_chrome_startup
 fi
 
-msg "Installation complete, please reboot with: $ sudo reboot"
-
+read -p "Press ENTER to reboot (c to cancel) ..." entry
+if [ ! -z $entry ]; then
+    if [ $entry = "c" ]; then
+        msg "Install cancelled"
+        exit 0
+    fi
+fi
+reboot
 exit 0
 
 ###############################################################################
